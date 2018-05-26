@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # import psycopg2 module
 import psycopg2
 
@@ -6,10 +7,7 @@ DBNAME = "news"
 
 
 # define function to get top articles
-def populate_top_articles():
-
-    # connect to an exsisting database
-    db = psycopg2.connect(database=DBNAME)
+def populate_top_articles(db):
 
     # open a cursor to perform the database operations
     cursor = db.cursor()
@@ -23,20 +21,13 @@ def populate_top_articles():
     # query the database and obtain the data
     results = cursor.fetchall()
 
-    # close the communication with the database
-    db.close()
-
     # print each record rows
     for row in results:
         print row[0], " -- ", row[1], "views"
 
 
 # define function to get the most popular authors
-def populate_most_popular_authors():
-
-    # connect to an existing database
-    db = psycopg2.connect(database=DBNAME)
-
+def populate_most_popular_authors(db):
     # open a cursor to perform the database operation
     cursor = db.cursor()
 
@@ -53,20 +44,13 @@ def populate_most_popular_authors():
     # results
     results = cursor.fetchall()
 
-    # close the communication with the database
-    db.close()
-
     # print each record rows
     for row in results:
         print row[0], " -- ", row[1], " views"
 
 
 # define function to show days where more than 1% of requests lead to errors
-def populate_days_errors():
-
-    # connect to an existing database
-    db = psycopg2.connect(database=DBNAME)
-
+def populate_days_errors(db):
     # open a cursors to perform the database operation
     cursor = db.cursor()
 
@@ -76,21 +60,29 @@ def populate_days_errors():
     # results
     results = cursor.fetchall()
 
-    # close the communication with the database
-    db.close()
-
     # print each record rows
     for row in results:
         print row[0], " -- ", row[3], "% errors"
 
 
-print ""
-print "______ TOP 3 ARTICLES ______"
-populate_top_articles()
-print ""
-print "______ MOST POPULAR AUTHORS ______"
-populate_most_popular_authors()
-print ""
-print "______ ERRORS > 1% BY DATE ______"
-populate_days_errors()
-print ""
+# define function to print all results
+def populate_results():
+    # connect to an exsisting database
+    db = psycopg2.connect(database=DBNAME)
+
+    print ""
+    print "______ TOP 3 ARTICLES ______"
+    populate_top_articles(db)
+    print ""
+    print "______ MOST POPULAR AUTHORS ______"
+    populate_most_popular_authors(db)
+    print ""
+    print "______ ERRORS > 1% BY DATE ______"
+    populate_days_errors(db)
+    print ""
+
+    # close the communication with the database
+    db.close()
+
+# populate results
+populate_results()
