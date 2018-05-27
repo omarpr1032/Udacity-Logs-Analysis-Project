@@ -68,21 +68,24 @@ def populate_days_errors(db):
 # define function to print all results
 def populate_results():
     # connect to an exsisting database
-    db = psycopg2.connect(database=DBNAME)
+    try:
+        db = psycopg2.connect(database=DBNAME)
+    except:
+        print("Unable to connect to database: " + DBNAME)
+    else:
+        print ""
+        print "______ TOP 3 ARTICLES ______"
+        populate_top_articles(db)
+        print ""
+        print "______ MOST POPULAR AUTHORS ______"
+        populate_most_popular_authors(db)
+        print ""
+        print "______ ERRORS > 1% BY DATE ______"
+        populate_days_errors(db)
+        print ""
+        # close the communication with the database
+        db.close()
 
-    print ""
-    print "______ TOP 3 ARTICLES ______"
-    populate_top_articles(db)
-    print ""
-    print "______ MOST POPULAR AUTHORS ______"
-    populate_most_popular_authors(db)
-    print ""
-    print "______ ERRORS > 1% BY DATE ______"
-    populate_days_errors(db)
-    print ""
-
-    # close the communication with the database
-    db.close()
-
-# populate results
-populate_results()
+if __name__ == "__main__":
+    # populate results
+    populate_results()
